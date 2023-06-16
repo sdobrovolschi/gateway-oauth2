@@ -1,0 +1,54 @@
+{
+  "realm": "realm",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "gateway",
+      "bearerOnly": false,
+      "publicClient": false,
+      "secret": "secret",
+      "standardFlowEnabled": false,
+      "serviceAccountsEnabled": true,
+      "attributes": {
+        "access.token.lifespan": "300"
+      },
+      "fullScopeAllowed": false,
+      "defaultClientScopes": [
+        "service"
+      ]
+    },
+    {
+      "clientId": "service",
+      "bearerOnly": true,
+      "secret": "secret",
+      "serviceAccountsEnabled": true
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "service",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "service",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "gateway",
+      "enabled": true,
+      "serviceAccountClientId": "gateway"
+    }
+  ]
+}

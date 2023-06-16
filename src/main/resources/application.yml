@@ -1,0 +1,27 @@
+#spring.security.oauth2.client.provider.keycloak.token-uri=${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/token
+spring:
+  security:
+    oauth2:
+      client:
+        connection-timeout: 30s
+        read-timeout: 60s
+        clock-skew: 10s
+        registration:
+          gateway:
+            provider: keycloak
+            authorization-grant-type: client_credentials
+            client-id: gateway
+            client-secret: secret
+        provider:
+          keycloak:
+#            issuer-uri: ${embedded.keycloak.auth-server-url}realms/realm
+            token-uri: ${embedded.keycloak.auth-server-url}realms/realm/protocol/openid-connect/token
+  cloud:
+    gateway:
+      routes:
+        - id: resource
+          uri: http://localhost:8081
+          predicates:
+            - Path=/resource
+          filters:
+            - Oauth2Client=gateway
